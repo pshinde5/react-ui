@@ -1,3 +1,5 @@
+import * as Action from './../ActionTypes';
+
 import axios from 'axios';
 
 const AppConfig = {
@@ -21,12 +23,11 @@ const aia = {
 
 export const fetch = (href: string, callType = 'get', baId:string, params?: Object) => (dispatch: any, getState: any) => {
     const timestamp = Date.now()
-    const actionPrefix = `BA_${callType.toUpperCase()}`
-    dispatch({type: `${actionPrefix}_PENDING`, href, timestamp, baId})
+    dispatch({type: Action.BA_GET_PENDING, href, timestamp, baId})
     //Search if we have already fetch this hRef
     if (getState().aia[baId] && getState().aia[baId][href]) {
         dispatch({
-            type: `${actionPrefix}_SUCCESS`,
+            type: Action.BA_GET_SUCCESS,
             data: getState().aia[baId][href].data,
             store:getState(),
             params: params,
@@ -39,7 +40,7 @@ export const fetch = (href: string, callType = 'get', baId:string, params?: Obje
         promise.then(
             (response:any) => {
                 dispatch({
-                    type: `${actionPrefix}_SUCCESS`,
+                    type: Action.BA_GET_SUCCESS,
                     data: response.data,
                     store:getState(),
                     href,
@@ -48,7 +49,7 @@ export const fetch = (href: string, callType = 'get', baId:string, params?: Obje
             })
             .catch((error: any) => {
                 dispatch({
-                    type: `${actionPrefix}_ERROR`,
+                    type: Action.BA_GET_ERROR,
                     error,
                     href,
                     baId
@@ -60,15 +61,14 @@ export const fetch = (href: string, callType = 'get', baId:string, params?: Obje
 
 export const refresh = (href: string, callType = 'refresh', baId:string, params?: Object) => (dispatch: any, getState: any) => {
     const timestamp = Date.now()
-    const actionPrefix = `BA_${callType.toUpperCase()}`
 
-    dispatch({type: `${actionPrefix}_PENDING`, href, timestamp, baId})
+    dispatch({type: Action.BA_REFRESH_PENDING, href, timestamp, baId})
 
     const promise = aia.get(href, params);
     promise.then(
         (response:any) => {
             dispatch({
-                type: `${actionPrefix}_SUCCESS`,
+                type: Action.BA_REFRESH_SUCCESS,
                 data: response.data,
                 store:getState(),
                 params: params,
@@ -78,7 +78,7 @@ export const refresh = (href: string, callType = 'refresh', baId:string, params?
         })
         .catch((error: any) => {
             dispatch({
-                type: `${actionPrefix}_ERROR`,
+                type: Action.BA_REFRESH_ERROR,
                 error,
                 href,
                 baId
@@ -88,9 +88,7 @@ export const refresh = (href: string, callType = 'refresh', baId:string, params?
 }
 
 export const post = (href: string, body: Object, baId: string, params?: Object) => (dispatch: any, getState:any) => {
-    let callType = 'post';
-    const actionPrefix = `BA_${callType.toUpperCase()}`
-    dispatch({type: `${actionPrefix}_PENDING`, href, baId})
+    dispatch({type: Action.BA_POST_PENDING, href, baId})
 
     const promise = aia.post(href, body, params);
     promise.then((response: any) => {
@@ -104,13 +102,13 @@ export const post = (href: string, body: Object, baId: string, params?: Object) 
             }
         }
         dispatch({
-            type: `${actionPrefix}_SUCCESS`,
+            type: Action.BA_POST_SUCCESS,
             href
         })
     })
         .catch((error: any) => {
             dispatch({
-                type: `${actionPrefix}_ERROR`,
+                type: Action.BA_POST_ERROR,
                 error,
                 href
             })
@@ -119,9 +117,7 @@ export const post = (href: string, body: Object, baId: string, params?: Object) 
 }
 
 export const patch = (href: string, payload: Object, baId: string, params?: Object) => (dispatch: any, getState:any) => {
-    let callType = 'patch';
-    const actionPrefix = `BA_${callType.toUpperCase()}`
-    dispatch({type: `${actionPrefix}_PENDING`, href, baId})
+    dispatch({type: Action.BA_PATCH_PENDING, href, baId})
     const promise = aia.patch(href, payload, params);
     promise.then((response: any) => {
         // case1: modified headers recieved in response headers
@@ -141,7 +137,7 @@ export const patch = (href: string, payload: Object, baId: string, params?: Obje
             }
         }
         dispatch({
-            type: `${actionPrefix}_SUCCESS`,
+            type: Action.BA_PATCH_SUCCESS,
             data: response.data,
             store:getState(),
             params: params,
@@ -151,7 +147,7 @@ export const patch = (href: string, payload: Object, baId: string, params?: Obje
     })
         .catch((error: any) => {
             dispatch({
-                type: `${actionPrefix}_ERROR`,
+                type: Action.BA_PATCH_ERROR,
                 error,
                 href,
                 baId
@@ -161,9 +157,7 @@ export const patch = (href: string, payload: Object, baId: string, params?: Obje
 }
 
 export const deleteRequest = (href: string, baId: string, params?: Object) => (dispatch: any, getState:any) => {
-    let callType = 'delete';
-    const actionPrefix = `BA_${callType.toUpperCase()}`
-    dispatch({type: `${actionPrefix}_PENDING`, href, baId})
+    dispatch({type: Action.BA_DELETE_PENDING, href, baId})
 
     const promise = aia.delete(href, params);
     promise.then((response: any) => {
@@ -177,7 +171,7 @@ export const deleteRequest = (href: string, baId: string, params?: Object) => (d
             }
         }
         dispatch({
-            type: `${actionPrefix}_SUCCESS`,
+            type: Action.BA_DELETE_SUCCESS,
             data: response.data,
             href,
             baId
@@ -185,7 +179,7 @@ export const deleteRequest = (href: string, baId: string, params?: Object) => (d
     })
         .catch((error: any) => {
             dispatch({
-                type: `${actionPrefix}_ERROR`,
+                type: Action.BA_DELETE_ERROR,
                 error,
                 href,
                 baId
