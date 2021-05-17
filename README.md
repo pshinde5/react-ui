@@ -12,7 +12,11 @@ Current implementation is to store the API resources in the Redux store for the 
 
 NOTE: Connection to VPN BIGIP is required to access the API
 ## Use case 1
-We have one property Start Date on Quote resource. When we patch a date on this field, it has an impact on the sub resource like Coverage start date. We need to update this Coverage start date in UI after the patch
+We have one property Start Date on Quote resource. When we patch a date on this field, it has an impact on the sub resource like Coverage start date. We need to update this Coverage start date in UI after the patch.
+
+API communicates this changes to the UI via x-graphtalk-modified tag in the Response headers. 
+
+We traverse the existing store & check if any modified URI is present it the store. If any URL is found, it is refreshed & update the store 
 
 ### Hooks
 1. useActivity : To start an business activity (Quote, Contract or Client) & create new object in aia store with this url (baId) 
