@@ -1,8 +1,3 @@
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
 # Description
 Current implementation is to store the API resources in the Redux store for the following main purpose:
 1.	To avoid redundant GET calls on resources & reuse the response from store when needed
@@ -10,7 +5,11 @@ Current implementation is to store the API resources in the Redux store for the 
 
 NOTE: Connection to VPN BIGIP is required to access the API
 ## Use case 1
-We have one property Start Date on Quote resource. When we patch a date on this field, it has an impact on the sub resource like Coverage start date. We need to update this Coverage start date in UI after the patch
+We have one property Start Date on Quote resource. When we patch a date on this field, it has an impact on the sub resource like Coverage start date. We need to update this Coverage start date in UI after the patch.
+
+API communicates this changes to the UI via x-graphtalk-modified tag in the Response headers. 
+
+We traverse the existing store & check if any modified URI is present it the store. If any URL is found, it is refreshed & update the store 
 
 ### HOC
 1. withActivity: Helps in providing calling the component by passing href via context & the Component.
