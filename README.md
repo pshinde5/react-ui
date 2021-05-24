@@ -1,11 +1,3 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -20,6 +12,14 @@ NOTE: Connection to VPN BIGIP is required to access the API
 ## Use case 1
 We have one property Start Date on Quote resource. When we patch a date on this field, it has an impact on the sub resource like Coverage start date. We need to update this Coverage start date in UI after the patch
 
+### HOC
+1. withActivity: Helps in providing calling the component by passing href via context & the Component.
+
+### Context
+1. baContext: Use of context is just to have access to current business entity (baId) in all components like href of quote/Id or Contract/Id. The provider is used inside HOC (withActivity).
 ### Hooks
-1. useActivity : To start an business activity (Quote, Contract or Client) & create new object in aia store with this url (baId) 
-2. useAia: For http requests like Get, Patch, Post
+1. useActivity : To start an business activity (Quote, Contract or Client) & create new object in aia store with this url (baId).
+2. useAia: Hook for http requests methods like Get, Patch, Post. It uses current baId provided by Bacontext, dispatches action & returns a promise. 
+
+### Actions
+1. aiaActions: Consists different actions based on API requests, performing axios calls, handling of modified headers.
